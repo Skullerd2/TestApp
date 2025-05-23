@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         if !hasInitializedKeychain {
             KeychainManager.shared.save("1234", key: "login")
-            KeychainManager.shared.save("4321", key: "password")
+            KeychainManager.shared.save("1234", key: "password")
 
             UserDefaults.standard.set(true, forKey: "hasInitializedKeychain")
             UserDefaults.standard.synchronize()

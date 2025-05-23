@@ -148,6 +148,11 @@ extension LoginView {
         loginButton.setAttributedTitle(onTapTitle, for: .highlighted)
         loginButton.backgroundColor = #colorLiteral(red: 0.09803921569, green: 0.1098039216, blue: 0.1960784314, alpha: 1)
         loginButton.layer.cornerRadius = 27.5
+        loginButton.layer.shadowColor = #colorLiteral(red: 0.09803921569, green: 0.1098039216, blue: 0.1960784314, alpha: 1)
+        loginButton.layer.shadowOpacity = 0.1
+        loginButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        loginButton.layer.shadowRadius = 10
+        loginButton.layer.masksToBounds = false
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         view.addSubview(loginButton)
