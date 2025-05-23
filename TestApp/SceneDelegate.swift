@@ -16,9 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         configureKeychainOnFirstLaunch()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let loginViewModel = LoginViewModel()
-        let loginView = LoginView(viewModel: loginViewModel)
-        window!.rootViewController = loginView
+        let homeViewModel = HomeViewModel()
+        let homeView = HomeView(viewModel: homeViewModel)
+        window?.rootViewController = homeView
+//        let loginViewModel = LoginViewModel()
+//        let loginView = LoginView(viewModel: loginViewModel)
+//        window!.rootViewController = loginView
         window?.makeKeyAndVisible()
     }
 

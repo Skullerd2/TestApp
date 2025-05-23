@@ -34,6 +34,7 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
     }
 
 }
@@ -47,6 +48,7 @@ extension HomeView {
         setupMenuButton()
         setupProgramLabel()
         setupMoreButton()
+        setupBoxImageView()
         setupListOfCurrencyView()
         setupTrendingLabel()
         setupSortButton()
@@ -63,9 +65,18 @@ extension HomeView {
     }
     
     func setupMenuButton() {
-        moreButton.setImage(UIImage(named: "moreButtonIcon"), for: .normal)
-        moreButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(moreButton)
+        menuButton.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.8)
+        menuButton.layer.cornerRadius = 24
+        menuButton.setImage(.menuButtonIcon, for: .normal)
+        menuButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(menuButton)
+    }
+    
+    func setupBoxImageView() {
+        boxImageView.image = UIImage(named: "boxImage")
+        boxImageView.contentMode = .scaleAspectFit
+        boxImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(boxImageView)
     }
     
     func setupProgramLabel() {
@@ -79,29 +90,31 @@ extension HomeView {
     
     func setupMoreButton() {
         moreButton.backgroundColor = .white
-        let normalTitle = NSAttributedString(string: "Login", attributes: [
+        let normalTitle = NSAttributedString(string: "Learn more", attributes: [
             .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.1529411765, blue: 0.2352941176, alpha: 1),
             .font: UIFont(name: "Poppins Bold", size: 15)!
         ])
-        let onTapTitle = NSAttributedString(string: "Login", attributes: [
+        let onTapTitle = NSAttributedString(string: "Learn more", attributes: [
             .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.1529411765, blue: 0.2352941176, alpha: 0.5),
             .font: UIFont(name: "Poppins Bold", size: 15)!
         ])
         
         moreButton.setAttributedTitle(normalTitle, for: .normal)
         moreButton.setAttributedTitle(onTapTitle, for: .highlighted)
+        moreButton.layer.cornerRadius = 17.5
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(moreButton)
     }
     
     func setupListOfCurrencyView() {
         listOfCurrencyView.backgroundColor = #colorLiteral(red: 0.968627451, green: 0.968627451, blue: 0.9803921569, alpha: 1)
+        listOfCurrencyView.layer.cornerRadius = 40
         listOfCurrencyView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(listOfCurrencyView)
     }
     
     func setupTrendingLabel() {
-        trendingLabel.attributedText = NSAttributedString(string: "Login", attributes: [
+        trendingLabel.attributedText = NSAttributedString(string: "Trending", attributes: [
             .foregroundColor: #colorLiteral(red: 0.09803921569, green: 0.1098039216, blue: 0.1960784314, alpha: 1),
             .font: UIFont(name: "Poppins Medium", size: 20)!
         ])
@@ -127,14 +140,96 @@ extension HomeView {
     }
 }
 
+//MARK: Setup Constraints
+
+extension HomeView {
+    func setupConstraints() {
+        setupHomeLabelConstraints()
+        setupMenuButtonConstraints()
+        setupProgramLabelConstraints()
+        setupMoreButtonConstraints()
+        setupBoxImageViewConstraints()
+        setupListOfCurrencyViewConstraints()
+        setupTrendingLabelConstraints()
+        setupSortButtonConstraints()
+    }
+    
+    func setupHomeLabelConstraints() {
+        NSLayoutConstraint.activate([
+            homeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
+            homeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16)
+        ])
+    }
+    
+    func setupMenuButtonConstraints() {
+        NSLayoutConstraint.activate([
+            menuButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            menuButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
+            menuButton.heightAnchor.constraint(equalToConstant: 48),
+            menuButton.widthAnchor.constraint(equalToConstant: 48)
+        ])
+    }
+    
+    func setupProgramLabelConstraints() {
+        NSLayoutConstraint.activate([
+            programLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
+            programLabel.topAnchor.constraint(equalTo: homeLabel.bottomAnchor, constant: 52),
+        ])
+    }
+    
+    func setupMoreButtonConstraints() {
+        NSLayoutConstraint.activate([
+            moreButton.topAnchor.constraint(equalTo: programLabel.bottomAnchor, constant: 16),
+            moreButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
+            moreButton.heightAnchor.constraint(equalToConstant: 35),
+            moreButton.widthAnchor.constraint(equalToConstant: 127)
+        ])
+    }
+    
+    func setupBoxImageViewConstraints() {
+        NSLayoutConstraint.activate([
+            boxImageView.topAnchor.constraint(equalTo: menuButton.bottomAnchor, constant: 16),
+            boxImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 30),
+            boxImageView.heightAnchor.constraint(equalToConstant: 242),
+            boxImageView.widthAnchor.constraint(equalToConstant: 242)
+        ])
+    }
+    
+    func setupListOfCurrencyViewConstraints() {
+        NSLayoutConstraint.activate([
+            listOfCurrencyView.topAnchor.constraint(equalTo: moreButton.bottomAnchor, constant: 52),
+            listOfCurrencyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            listOfCurrencyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            listOfCurrencyView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    func setupTrendingLabelConstraints() {
+        NSLayoutConstraint.activate([
+            trendingLabel.leadingAnchor.constraint(equalTo: listOfCurrencyView.leadingAnchor, constant: 25),
+            trendingLabel.topAnchor.constraint(equalTo: listOfCurrencyView.topAnchor, constant: 25)
+        ])
+    }
+    
+    func setupSortButtonConstraints() {
+        NSLayoutConstraint.activate([
+            sortButton.topAnchor.constraint(equalTo: listOfCurrencyView.topAnchor, constant: 25),
+            sortButton.trailingAnchor.constraint(equalTo: listOfCurrencyView.trailingAnchor, constant: -25),
+            sortButton.heightAnchor.constraint(equalToConstant: 24),
+            sortButton.widthAnchor.constraint(equalToConstant: 24)
+        ])
+    }
+}
+
 //MARK: TableView
 
 extension HomeView {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Currency") as! CurrencyTableViewCell
+        return cell
     }
 }
