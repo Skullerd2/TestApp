@@ -16,7 +16,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A568AB142DDFED350076E94F /* Exceptions for "TestApp" folder in "TestApp" target */ = {
+		A568ACF42DE0F9260076E94F /* Exceptions for "TestApp" folder in "TestApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -29,7 +29,7 @@
 		A568AB042DDFED2E0076E94F /* TestApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A568AB142DDFED350076E94F /* Exceptions for "TestApp" folder in "TestApp" target */,
+				A568ACF42DE0F9260076E94F /* Exceptions for "TestApp" folder in "TestApp" target */,
 			);
 			path = TestApp;
 			sourceTree = "<group>";
