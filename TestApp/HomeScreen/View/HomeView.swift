@@ -168,7 +168,7 @@ extension HomeView {
     
     func setupMenuButtonConstraints() {
         NSLayoutConstraint.activate([
-            menuButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            menuButton.centerYAnchor.constraint(equalTo: homeLabel.centerYAnchor),
             menuButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
             menuButton.heightAnchor.constraint(equalToConstant: 48),
             menuButton.widthAnchor.constraint(equalToConstant: 48)
@@ -193,7 +193,7 @@ extension HomeView {
     
     func setupBoxImageViewConstraints() {
         NSLayoutConstraint.activate([
-            boxImageView.topAnchor.constraint(equalTo: menuButton.bottomAnchor, constant: 16),
+            boxImageView.topAnchor.constraint(equalTo: menuButton.bottomAnchor, constant: 22),
             boxImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 30),
             boxImageView.heightAnchor.constraint(equalToConstant: 242),
             boxImageView.widthAnchor.constraint(equalToConstant: 242)
@@ -202,7 +202,7 @@ extension HomeView {
     
     func setupListOfCurrencyViewConstraints() {
         NSLayoutConstraint.activate([
-            listOfCurrencyView.topAnchor.constraint(equalTo: moreButton.bottomAnchor, constant: 52),
+            listOfCurrencyView.topAnchor.constraint(equalTo: moreButton.bottomAnchor, constant: 46),
             listOfCurrencyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             listOfCurrencyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             listOfCurrencyView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -227,7 +227,7 @@ extension HomeView {
     
     func setupTableViewConstraints() {
         NSLayoutConstraint.activate([
-            currencyTableView.topAnchor.constraint(equalTo: trendingLabel.bottomAnchor, constant: 25),
+            currencyTableView.topAnchor.constraint(equalTo: trendingLabel.bottomAnchor, constant: 16),
             currencyTableView.leadingAnchor.constraint(equalTo: listOfCurrencyView.leadingAnchor),
             currencyTableView.trailingAnchor.constraint(equalTo: listOfCurrencyView.trailingAnchor),
             currencyTableView.bottomAnchor.constraint(equalTo: listOfCurrencyView.bottomAnchor)
