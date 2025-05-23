@@ -10,5 +10,5 @@ import Foundation
 class HomeViewModel {
     
     let isSortedByAscendingOrder = false
-    
+    var currencyViewModels: [CurrencyCellViewModel] = []
 }

@@ -22,6 +22,7 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let viewModel: HomeViewModel
     
+    
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -33,6 +34,8 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        currencyTableView.delegate = self
+        currencyTableView.dataSource = self
         setupUI()
         setupConstraints()
     }
@@ -133,6 +136,7 @@ extension HomeView {
     }
     
     func setupTableView() {
+        currencyTableView.register(CurrencyTableViewCell.self, forCellReuseIdentifier: "CurrencyCell")
         currencyTableView.translatesAutoresizingMaskIntoConstraints = false
         currencyTableView.backgroundColor = .clear
         currencyTableView.separatorStyle = .none
@@ -152,6 +156,7 @@ extension HomeView {
         setupListOfCurrencyViewConstraints()
         setupTrendingLabelConstraints()
         setupSortButtonConstraints()
+        setupTableViewConstraints()
     }
     
     func setupHomeLabelConstraints() {
@@ -219,6 +224,15 @@ extension HomeView {
             sortButton.widthAnchor.constraint(equalToConstant: 24)
         ])
     }
+    
+    func setupTableViewConstraints() {
+        NSLayoutConstraint.activate([
+            currencyTableView.topAnchor.constraint(equalTo: trendingLabel.bottomAnchor, constant: 25),
+            currencyTableView.leadingAnchor.constraint(equalTo: listOfCurrencyView.leadingAnchor),
+            currencyTableView.trailingAnchor.constraint(equalTo: listOfCurrencyView.trailingAnchor),
+            currencyTableView.bottomAnchor.constraint(equalTo: listOfCurrencyView.bottomAnchor)
+        ])
+    }
 }
 
 //MARK: TableView
@@ -229,7 +243,15 @@ extension HomeView {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Currency") as! CurrencyTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CurrencyCell", for: indexPath) as? CurrencyTableViewCell else {
+            fatalError("Could not dequeue CurrencyTableViewCell")
+        }
+
+        let viewModel = CurrencyCellViewModel(image: .bitcoin, title: "Bitcoin", description: "BTC", price: "$32,128.80", changingIcon: .growth, changingText: "2.5%")
+        cell.configure(with: viewModel)
         return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
     }
 }
