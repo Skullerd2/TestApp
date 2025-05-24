@@ -249,7 +249,10 @@ extension LoginView {
 extension LoginView {
     @objc func loginButtonTapped() {
         if viewModel.authorizeToAccount(login: usernameTextField.text ?? "", password: passwordTextField.text ?? "") {
-            
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                view.endEditing(true)
+                sceneDelegate.switchRootVCToTabView()
+            }
         } else {
             let alertController = UIAlertController(title: "Ошибка", message: "Введены неправильный логин или пароль", preferredStyle: .alert)
             let repeatAction = UIAlertAction(title: "Повторить", style: .default)

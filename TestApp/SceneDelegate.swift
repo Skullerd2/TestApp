@@ -16,16 +16,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         configureKeychainOnFirstLaunch()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-//        let homeViewModel = HomeViewModel()
-//        let homeView = HomeView(viewModel: homeViewModel)
-//        let navigationController = UINavigationController(rootViewController: homeView)
-//        navigationController.navigationBar.isHidden = true
-        window?.rootViewController = TabView()
-//        let loginViewModel = LoginViewModel()
-//        let loginView = LoginView(viewModel: loginViewModel)
-//        window!.rootViewController = loginView
+        window?.rootViewController = LoginView(viewModel: LoginViewModel())
         window?.makeKeyAndVisible()
     }
+    
+    func switchRootVCToTabView() {
+        guard let currentWindow = self.window else { return }
+        guard let windowScene = currentWindow.windowScene else { return }
+
+        let newWindow = UIWindow(windowScene: windowScene)
+        newWindow.rootViewController = TabView()
+        newWindow.makeKeyAndVisible()
+        
+        self.window = newWindow
+        currentWindow.isHidden = true
+    }
+
+    
+    func switchRootVCToLoginView() {
+        guard let currentWindow = self.window else { return }
+        guard let windowScene = currentWindow.windowScene else { return }
+
+        let newWindow = UIWindow(windowScene: windowScene)
+        let viewModel = LoginViewModel()
+        newWindow.rootViewController = LoginView(viewModel: viewModel)
+        newWindow.makeKeyAndVisible()
+        
+        self.window = newWindow
+        currentWindow.isHidden = true
+    }
+
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -71,6 +91,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             print("Keychain already initialized")
         }
     }
-    
 }
 

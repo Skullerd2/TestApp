@@ -297,6 +297,9 @@ extension DetailCoinView {
     }
     
     @objc func logoutButtonTapped() {
-        
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            view.endEditing(true)
+            sceneDelegate.switchRootVCToLoginView()
+        }
     }
 }

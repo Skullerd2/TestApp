@@ -144,6 +144,7 @@ extension HomeView {
         logoutButton.semanticContentAttribute = .forceLeftToRight
         logoutButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         menuView.addSubview(logoutButton)
     }
     
@@ -403,6 +404,13 @@ extension HomeView {
     @objc func updateButtonTapped() {
         changeMenuVisibility()
         viewModel.updateCurrencyData()
+    }
+    
+    @objc func logoutButtonTapped() {
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            view.endEditing(true)
+            sceneDelegate.switchRootVCToLoginView()
+        }
     }
     
     @objc func sortButtonTapped() {
