@@ -20,6 +20,12 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let loadingActivityIndicator = UIActivityIndicatorView()
     let currencyTableView = UITableView()
     
+    let menuView = UIView()
+    let updateImageView = UIImageView()
+    let updateButton = UIButton()
+    let logoutImageView = UIImageView()
+    let logoutButton = UIButton()
+    
     let viewModel: HomeViewModel
     
     
@@ -36,9 +42,15 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         super.viewDidLoad()
         currencyTableView.delegate = self
         currencyTableView.dataSource = self
-        viewModel.fetchMultipleCurrenciesData()
         setupUI()
         setupConstraints()
+        
+        viewModel.fetchMultipleCurrenciesData()
+        viewModel.onCurrenciesUpdated = { [weak self] in
+            DispatchQueue.main.async {
+                self?.currencyTableView.reloadData()
+            }
+        }
     }
 
 }
@@ -240,7 +252,7 @@ extension HomeView {
 
 extension HomeView {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return viewModel.currencyViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -248,8 +260,15 @@ extension HomeView {
             fatalError("Could not dequeue CurrencyTableViewCell")
         }
 
-        let viewModel = CurrencyCellViewModel(image: .bitcoin, title: "Bitcoin", description: "BTC", price: "$32,128.80", changingIcon: .growth, changingText: "2.5%")
-        cell.configure(with: viewModel)
+        let currencyData = viewModel.currencyViewModels[indexPath.row]
+        let cellViewModel = CurrencyCellViewModel(
+            image: currencyData.image,
+            title: currencyData.title,
+            description: currencyData.description,
+            price: currencyData.price,
+            changingIcon: currencyData.changingIcon,
+            changingText: currencyData.changingText)
+        cell.configure(with: cellViewModel)
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

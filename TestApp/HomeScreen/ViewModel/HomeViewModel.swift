@@ -6,14 +6,64 @@
 //
 
 import Foundation
+import UIKit
 
 class HomeViewModel {
     
     let networkManager = NetworkManager.shared
     
     let isSortedByAscendingOrder = false
-    var currencyViewModels: [CurrencyCellViewModel] = []
+    private(set) var currencyViewModels: [CurrencyCellViewModel] = []
+    var onCurrenciesUpdated: (() -> Void)?
     
+    func formatCurrency(_ value: Float, scale: Float = 1.0, localeIdentifier: String = "en_US") -> String {
+        let scaledValue = value / scale
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        formatter.locale = Locale(identifier: localeIdentifier)
+        
+        return formatter.string(from: NSNumber(value: scaledValue)) ?? "$0.00"
+    }
+    
+    func formatAsPercentage(_ value: Float) -> String {
+        let absValue = abs(value)
+        return String(format: "%.1f%%", absValue)
+    }
+    
+    func getImageForCurrency(currency: String) -> UIImage{
+        switch currency {
+        case "BTC":
+            return .bitcoin
+        case "ETH":
+            return .eth
+        case "TRX":
+            return .trx
+        case "luna":
+            return .luna
+        case "DOT":
+            return .dot
+        case "DOGE":
+            return .doge
+        case "USDT":
+            return .usdt
+        case "XLM":
+            return .XLM
+        case "ADA":
+            return .ada
+        case "XRP":
+            return .xrp
+        default:
+            return .clearCoin
+        }
+    }
+}
+
+
+//MARK: Network
+
+extension HomeViewModel {
     func fetchCurrencyData(currency: String) {
         networkManager.fetchCurrencyData(currency: currency) { result in
             switch result {
@@ -43,12 +93,19 @@ class HomeViewModel {
             }
         }
         
-        dispatchGroup.notify(queue: .main) {
+        dispatchGroup.notify(queue: .main) { [weak self] in
             for currency in currencies {
                 if let result = results[currency] {
                     switch result {
                     case .success(let data):
-                        print("\(currency): \(data)")
+                        let currencyCellModel = CurrencyCellViewModel(
+                            image: (self?.getImageForCurrency(currency: data.data.symbol))!,
+                            title: data.data.name,
+                            description: data.data.symbol,
+                            price: (self?.formatCurrency(data.data.marketData.priceUsd))!,
+                            changingIcon: data.data.marketData.percentChangeUsdLast24Hours > 0 ? .growth : .decline,
+                            changingText: (self?.formatAsPercentage(data.data.marketData.percentChangeUsdLast24Hours))!)
+                        self?.currencyViewModels.append(currencyCellModel)
                     case .failure(let error):
                         print("\(currency): Error - \(error.localizedDescription)")
                     }
@@ -56,7 +113,7 @@ class HomeViewModel {
                     print("\(currency): No result")
                 }
             }
+            self?.onCurrenciesUpdated?() 
         }
     }
-
 }

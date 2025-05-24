@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 struct CurrencyCellViewModel {
     let image: UIImage
     let title: String
