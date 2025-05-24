@@ -36,7 +36,7 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         super.viewDidLoad()
         currencyTableView.delegate = self
         currencyTableView.dataSource = self
-        viewModel.fetchCurrencyData(currency: "btc")
+        viewModel.fetchMultipleCurrenciesData()
         setupUI()
         setupConstraints()
     }

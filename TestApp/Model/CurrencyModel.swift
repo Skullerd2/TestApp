@@ -17,7 +17,6 @@ struct DataModel: Decodable {
     let marketData: MarketData
     let marketcap: MarketCapitalization
     let supply: Supply
-    
 }
 
 struct MarketData: Decodable {
@@ -30,6 +29,6 @@ struct MarketCapitalization: Decodable {
 }
 
 struct Supply: Decodable {
-    let circulating: Int
+    let circulating: Float
 }
 
