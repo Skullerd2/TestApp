@@ -13,6 +13,7 @@ class HomeViewModel {
     let networkManager = NetworkManager.shared
     
     let isSortedByAscendingOrder = false
+    let isMenuButtonActive = false
     private(set) var currencyViewModels: [CurrencyCellViewModel] = []
     var onCurrenciesUpdated: (() -> Void)?
     

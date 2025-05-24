@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     let homeLabel = UILabel()
     let menuButton = UIButton()
     let programLabel = UILabel()
@@ -48,11 +48,12 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         viewModel.fetchMultipleCurrenciesData()
         viewModel.onCurrenciesUpdated = { [weak self] in
             DispatchQueue.main.async {
+                self?.loadingActivityIndicator.isHidden.toggle()
                 self?.currencyTableView.reloadData()
             }
         }
     }
-
+    
 }
 
 //MARK: Setup UI
@@ -62,13 +63,17 @@ extension HomeView {
         view.backgroundColor = #colorLiteral(red: 1, green: 0.6039215686, blue: 0.6980392157, alpha: 1)
         setupHomeLabel()
         setupMenuButton()
+        setupLogoutButton()
+        setupUpdateButton()
         setupProgramLabel()
         setupMoreButton()
         setupBoxImageView()
+        setupMenuView()
         setupListOfCurrencyView()
         setupTrendingLabel()
         setupSortButton()
         setupTableView()
+        setupActivityIndicatorView()
     }
     
     func setupHomeLabel() {
@@ -85,7 +90,56 @@ extension HomeView {
         menuButton.layer.cornerRadius = 24
         menuButton.setImage(.menuButtonIcon, for: .normal)
         menuButton.translatesAutoresizingMaskIntoConstraints = false
+        menuButton.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         view.addSubview(menuButton)
+    }
+    
+    func setupMenuView() {
+        menuView.layer.cornerRadius = 16
+        menuView.backgroundColor = .white
+        menuView.translatesAutoresizingMaskIntoConstraints = false
+        menuView.isHidden = true
+        view.addSubview(menuView)
+    }
+    
+    func setupUpdateButton() {
+        let normalTitle = NSAttributedString(string: "Обновить", attributes: [
+            .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.1529411765, blue: 0.2352941176, alpha: 1),
+            .font: UIFont(name: "Poppins Regular", size: 18)!
+        ])
+        let onTapTitle = NSAttributedString(string: "Обновить", attributes: [
+            .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.1529411765, blue: 0.2352941176, alpha: 0.5),
+            .font: UIFont(name: "Poppins Regular", size: 18)!
+        ])
+        updateButton.backgroundColor = .clear
+        updateButton.setAttributedTitle(normalTitle, for: .normal)
+        updateButton.setAttributedTitle(onTapTitle, for: .highlighted)
+        updateButton.setImage(UIImage.update.withRenderingMode(.alwaysOriginal), for: .normal)
+        updateButton.adjustsImageWhenHighlighted = false
+        updateButton.semanticContentAttribute = .forceLeftToRight
+        updateButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
+        updateButton.translatesAutoresizingMaskIntoConstraints = false
+        menuView.addSubview(updateButton)
+    }
+    
+    func setupLogoutButton() {
+        let normalTitle = NSAttributedString(string: "Выйти", attributes: [
+            .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.1529411765, blue: 0.2352941176, alpha: 1),
+            .font: UIFont(name: "Poppins Regular", size: 18)!
+        ])
+        let onTapTitle = NSAttributedString(string: "Выйти", attributes: [
+            .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.1529411765, blue: 0.2352941176, alpha: 0.5),
+            .font: UIFont(name: "Poppins Regular", size: 18)!
+        ])
+        logoutButton.backgroundColor = .clear
+        logoutButton.setAttributedTitle(normalTitle, for: .normal)
+        logoutButton.setAttributedTitle(onTapTitle, for: .highlighted)
+        logoutButton.setImage(UIImage.logout.withRenderingMode(.alwaysOriginal), for: .normal)
+        logoutButton.adjustsImageWhenHighlighted = false
+        logoutButton.semanticContentAttribute = .forceLeftToRight
+        logoutButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        menuView.addSubview(logoutButton)
     }
     
     func setupBoxImageView() {
@@ -155,6 +209,12 @@ extension HomeView {
         currencyTableView.separatorStyle = .none
         listOfCurrencyView.addSubview(currencyTableView)
     }
+    
+    func setupActivityIndicatorView() {
+        loadingActivityIndicator.startAnimating()
+        loadingActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        listOfCurrencyView.addSubview(loadingActivityIndicator)
+    }
 }
 
 //MARK: Setup Constraints
@@ -163,6 +223,9 @@ extension HomeView {
     func setupConstraints() {
         setupHomeLabelConstraints()
         setupMenuButtonConstraints()
+        setupMenuViewConstraints()
+        setupUpdateButtonCostraints()
+        setupLogoutButtonCostraints()
         setupProgramLabelConstraints()
         setupMoreButtonConstraints()
         setupBoxImageViewConstraints()
@@ -170,6 +233,7 @@ extension HomeView {
         setupTrendingLabelConstraints()
         setupSortButtonConstraints()
         setupTableViewConstraints()
+        setupActivityIndicator()
     }
     
     func setupHomeLabelConstraints() {
@@ -187,6 +251,32 @@ extension HomeView {
             menuButton.widthAnchor.constraint(equalToConstant: 48)
         ])
     }
+    
+    func setupMenuViewConstraints() {
+        NSLayoutConstraint.activate([
+            menuView.heightAnchor.constraint(equalToConstant: 102),
+            menuView.widthAnchor.constraint(equalToConstant: 157),
+            menuView.topAnchor.constraint(equalTo: menuButton.bottomAnchor, constant: 8),
+            menuView.trailingAnchor.constraint(equalTo: menuButton.trailingAnchor)
+        ])
+    }
+    
+    func setupUpdateButtonCostraints() {
+        NSLayoutConstraint.activate([
+            updateButton.heightAnchor.constraint(equalToConstant: 27),
+            updateButton.centerXAnchor.constraint(equalTo: menuView.centerXAnchor),
+            updateButton.topAnchor.constraint(equalTo: menuView.topAnchor, constant: 16)
+        ])
+    }
+    
+    func setupLogoutButtonCostraints() {
+        NSLayoutConstraint.activate([
+            logoutButton.heightAnchor.constraint(equalToConstant: 27),
+            logoutButton.leadingAnchor.constraint(equalTo: updateButton.leadingAnchor),
+            logoutButton.bottomAnchor.constraint(equalTo: menuView.bottomAnchor, constant: -16)
+        ])
+    }
+    
     
     func setupProgramLabelConstraints() {
         NSLayoutConstraint.activate([
@@ -246,6 +336,13 @@ extension HomeView {
             currencyTableView.bottomAnchor.constraint(equalTo: listOfCurrencyView.bottomAnchor)
         ])
     }
+    
+    func setupActivityIndicator() {
+        NSLayoutConstraint.activate([
+            loadingActivityIndicator.centerXAnchor.constraint(equalTo: listOfCurrencyView.centerXAnchor),
+            loadingActivityIndicator.centerYAnchor.constraint(equalTo: listOfCurrencyView.centerYAnchor)
+        ])
+    }
 }
 
 //MARK: TableView
@@ -259,7 +356,7 @@ extension HomeView {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CurrencyCell", for: indexPath) as? CurrencyTableViewCell else {
             fatalError("Could not dequeue CurrencyTableViewCell")
         }
-
+        
         let currencyData = viewModel.currencyViewModels[indexPath.row]
         let cellViewModel = CurrencyCellViewModel(
             image: currencyData.image,
@@ -273,5 +370,25 @@ extension HomeView {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+}
+
+//MARK: Button functions
+
+extension HomeView {
+    @objc func menuButtonTapped() {
+        if menuView.isHidden {
+            menuView.alpha = 0
+            menuView.isHidden = false
+            UIView.animate(withDuration: 0.1) {
+                self.menuView.alpha = 1
+            }
+        } else {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.menuView.alpha = 0
+            }) { _ in
+                self.menuView.isHidden = true
+            }
+        }
     }
 }
