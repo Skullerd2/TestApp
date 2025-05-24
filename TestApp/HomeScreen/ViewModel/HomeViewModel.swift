@@ -14,8 +14,11 @@ class HomeViewModel {
     
     let isSortedByAscendingOrder = false
     let isMenuButtonActive = false
+    private(set) var sortedByAsc = false
     private(set) var currencyViewModels: [CurrencyCellViewModel] = []
+    private(set) var currencyModels: [CurrencyModel] = []
     var onCurrenciesUpdated: (() -> Void)?
+    var onCurrenciesSorted: (() -> Void)?
     
     func getImageForCurrency(currency: String) -> UIImage{
         switch currency {
@@ -48,6 +51,20 @@ class HomeViewModel {
         currencyViewModels = []
         fetchMultipleCurrenciesData()
         onCurrenciesUpdated?()
+    }
+    
+    func sort() {
+        if sortedByAsc {
+            currencyModels.sort { $0.data.marketData.priceUsd > $1.data.marketData.priceUsd }
+        } else {
+            currencyModels.sort { $0.data.marketData.priceUsd < $1.data.marketData.priceUsd }
+        }
+        sortedByAsc.toggle()
+        currencyViewModels = []
+        for i in 0..<currencyModels.count {
+            formatDataForCell(data: currencyModels[i])
+        }
+        onCurrenciesSorted?()
     }
 }
 
@@ -89,14 +106,8 @@ extension HomeViewModel {
                 if let result = results[currency] {
                     switch result {
                     case .success(let data):
-                        let currencyCellModel = CurrencyCellViewModel(
-                            image: (self?.getImageForCurrency(currency: data.data.symbol))!,
-                            title: data.data.name,
-                            description: data.data.symbol,
-                            price: (self?.formatCurrency(data.data.marketData.priceUsd))!,
-                            changingIcon: data.data.marketData.percentChangeUsdLast24Hours > 0 ? .growth : .decline,
-                            changingText: (self?.formatAsPercentage(data.data.marketData.percentChangeUsdLast24Hours))!)
-                        self?.currencyViewModels.append(currencyCellModel)
+                        self?.formatDataForCell(data: data)
+                        self?.currencyModels.append(data)
                     case .failure(let error):
                         print("\(currency): Error - \(error.localizedDescription)")
                     }
@@ -126,5 +137,16 @@ extension HomeViewModel {
     func formatAsPercentage(_ value: Float) -> String {
         let absValue = abs(value)
         return String(format: "%.1f%%", absValue)
+    }
+    
+    func formatDataForCell(data: CurrencyModel) {
+        let currencyCellModel = CurrencyCellViewModel(
+            image: getImageForCurrency(currency: data.data.symbol),
+            title: data.data.name,
+            description: data.data.symbol,
+            price: formatCurrency(data.data.marketData.priceUsd),
+            changingIcon: data.data.marketData.percentChangeUsdLast24Hours > 0 ? .growth : .decline,
+            changingText: formatAsPercentage(data.data.marketData.percentChangeUsdLast24Hours))
+        currencyViewModels.append(currencyCellModel)
     }
 }

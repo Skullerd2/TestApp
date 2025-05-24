@@ -52,6 +52,10 @@ class HomeView: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 self?.currencyTableView.reloadData()
             }
         }
+        
+        viewModel.onCurrenciesSorted = { [weak self] in
+            self?.currencyTableView.reloadData()
+        }
     }
     
 }
@@ -200,6 +204,7 @@ extension HomeView {
             sortButton.setImage(.sortAscendingOrder, for: .normal)
         }
         sortButton.translatesAutoresizingMaskIntoConstraints = false
+        sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         listOfCurrencyView.addSubview(sortButton)
     }
     
@@ -395,5 +400,9 @@ extension HomeView {
     
     @objc func updateButtonTapped() {
         viewModel.updateCurrencyData()
+    }
+    
+    @objc func sortButtonTapped() {
+        viewModel.sort()
     }
 }
