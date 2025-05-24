@@ -410,6 +410,7 @@ extension HomeView {
         if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
             view.endEditing(true)
             sceneDelegate.switchRootVCToLoginView()
+            viewModel.setAuthorizedFlag()
         }
     }
     

@@ -11,6 +11,7 @@ import UIKit
 class HomeViewModel {
     
     let networkManager = NetworkManager.shared
+    let defaults = UserDefaults.standard
     
     let isSortedByAscendingOrder = false
     let isMenuButtonActive = false
@@ -149,5 +150,13 @@ extension HomeViewModel {
             changingIcon: data.data.marketData.percentChangeUsdLast24Hours > 0 ? .growth : .decline,
             changingText: formatAsPercentage(data.data.marketData.percentChangeUsdLast24Hours))
         currencyViewModels.append(currencyCellModel)
+    }
+}
+
+//MARK: - Defaults
+
+extension HomeViewModel {
+    func setAuthorizedFlag() {
+        defaults.set(false, forKey: "isAuth")
     }
 }

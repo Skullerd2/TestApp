@@ -8,6 +8,9 @@
 import UIKit
 
 class DetailCoinViewModel {
+    
+    let defaults = UserDefaults.standard
+    
     let title: String
     let price: String
     let changeImage: UIImage
@@ -28,11 +31,21 @@ class DetailCoinViewModel {
 //MARK: Formatting
 
 extension DetailCoinViewModel {
+    
     func formatCapitalization() -> String {
         return "12442"
     }
     
     func formatSuply() -> String {
         return "1421"
+    }
+
+}
+
+//MARK: - Defaults
+
+extension DetailCoinViewModel {
+    func setAuthorizedFlag() {
+        defaults.set(false, forKey: "isAuth")
     }
 }

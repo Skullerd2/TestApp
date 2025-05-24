@@ -16,7 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         configureKeychainOnFirstLaunch()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = LoginView(viewModel: LoginViewModel())
+        let isAuth: Bool? = UserDefaults.standard.value(forKey: "isAuth") as? Bool
+        if isAuth != nil {
+            window?.rootViewController = isAuth! ? TabView() : LoginView(viewModel: LoginViewModel())
+        } else {
+            window?.rootViewController = LoginView(viewModel: LoginViewModel())
+        }
         window?.makeKeyAndVisible()
     }
     

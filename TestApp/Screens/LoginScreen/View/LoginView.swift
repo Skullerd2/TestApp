@@ -252,6 +252,7 @@ extension LoginView {
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                 view.endEditing(true)
                 sceneDelegate.switchRootVCToTabView()
+                viewModel.setAuthorizedFlag()
             }
         } else {
             let alertController = UIAlertController(title: "Ошибка", message: "Введены неправильный логин или пароль", preferredStyle: .alert)
