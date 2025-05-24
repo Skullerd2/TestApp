@@ -17,22 +17,6 @@ class HomeViewModel {
     private(set) var currencyViewModels: [CurrencyCellViewModel] = []
     var onCurrenciesUpdated: (() -> Void)?
     
-    func formatCurrency(_ value: Float, scale: Float = 1.0, localeIdentifier: String = "en_US") -> String {
-        let scaledValue = value / scale
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
-        formatter.locale = Locale(identifier: localeIdentifier)
-        
-        return formatter.string(from: NSNumber(value: scaledValue)) ?? "$0.00"
-    }
-    
-    func formatAsPercentage(_ value: Float) -> String {
-        let absValue = abs(value)
-        return String(format: "%.1f%%", absValue)
-    }
-    
     func getImageForCurrency(currency: String) -> UIImage{
         switch currency {
         case "BTC":
@@ -58,6 +42,12 @@ class HomeViewModel {
         default:
             return .clearCoin
         }
+    }
+    
+    func updateCurrencyData() {
+        currencyViewModels = []
+        fetchMultipleCurrenciesData()
+        onCurrenciesUpdated?()
     }
 }
 
@@ -116,5 +106,25 @@ extension HomeViewModel {
             }
             self?.onCurrenciesUpdated?() 
         }
+    }
+}
+
+//MARK: Formatting
+
+extension HomeViewModel {
+    func formatCurrency(_ value: Float, scale: Float = 1.0, localeIdentifier: String = "en_US") -> String {
+        let scaledValue = value / scale
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        formatter.locale = Locale(identifier: localeIdentifier)
+        
+        return formatter.string(from: NSNumber(value: scaledValue)) ?? "$0.00"
+    }
+    
+    func formatAsPercentage(_ value: Float) -> String {
+        let absValue = abs(value)
+        return String(format: "%.1f%%", absValue)
     }
 }

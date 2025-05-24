@@ -119,6 +119,7 @@ extension HomeView {
         updateButton.semanticContentAttribute = .forceLeftToRight
         updateButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
         updateButton.translatesAutoresizingMaskIntoConstraints = false
+        updateButton.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
         menuView.addSubview(updateButton)
     }
     
@@ -390,5 +391,9 @@ extension HomeView {
                 self.menuView.isHidden = true
             }
         }
+    }
+    
+    @objc func updateButtonTapped() {
+        viewModel.updateCurrencyData()
     }
 }
