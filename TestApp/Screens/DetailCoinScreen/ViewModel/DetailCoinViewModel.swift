@@ -16,14 +16,16 @@ class DetailCoinViewModel {
     let changeImage: UIImage
     let changeData: String
     let capitalization: Float
+    let description: String
     let suply: Float
     
-    init(title: String, price: String, changeImage: UIImage, changeData: String, capitalization: Float, suply: Float) {
+    init(title: String, price: String, changeImage: UIImage, changeData: String, capitalization: Float, description: String, suply: Float) {
         self.title = title
         self.price = price
         self.changeImage = changeImage
         self.changeData = changeData
         self.capitalization = capitalization
+        self.description = description
         self.suply = suply
     }
 }
@@ -32,14 +34,28 @@ class DetailCoinViewModel {
 
 extension DetailCoinViewModel {
     
-    func formatCapitalization() -> String {
-        return "12442"
+    func formatCapitalization(scale: Float = 1.0, localeIdentifier: String = "en_US") -> String {
+        let scaledValue = capitalization / scale
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        formatter.locale = Locale(identifier: localeIdentifier)
+        
+        return formatter.string(from: NSNumber(value: scaledValue)) ?? "$0.00"
     }
     
-    func formatSuply() -> String {
-        return "1421"
+    func formatSuply(scale: Float = 1.0, localeIdentifier: String = "en_US") -> String {
+        let scaledValue = suply / scale
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        formatter.locale = Locale(identifier: localeIdentifier)
+        
+        let formattedNumber = formatter.string(from: NSNumber(value: scaledValue)) ?? "0.00"
+        return "\(formattedNumber) \(description)"
     }
-
 }
 
 //MARK: - Defaults

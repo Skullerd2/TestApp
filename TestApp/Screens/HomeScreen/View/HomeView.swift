@@ -386,8 +386,9 @@ extension HomeView {
             price: viewModel.currencyViewModels[indexPath.row].price,
             changeImage: viewModel.currencyViewModels[indexPath.row].changingIcon,
             changeData: viewModel.currencyViewModels[indexPath.row].changingText,
-            capitalization: 0,
-            suply: 0
+            capitalization: viewModel.currencyModels[indexPath.row].data.marketcap.currentMarketcapUsd,
+            description: viewModel.currencyViewModels[indexPath.row].description,
+            suply: viewModel.currencyModels[indexPath.row].data.supply.circulating
         )
         let view = DetailCoinView(viewModel: viewModel)
         navigationController?.pushViewController(view, animated: true)
