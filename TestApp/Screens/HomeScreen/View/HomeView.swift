@@ -374,8 +374,22 @@ extension HomeView {
         cell.configure(with: cellViewModel)
         return cell
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let viewModel = DetailCoinViewModel(
+            title: "\(viewModel.currencyViewModels[indexPath.row].title) (\(viewModel.currencyViewModels[indexPath.row].description))",
+            price: viewModel.currencyViewModels[indexPath.row].price,
+            changeImage: viewModel.currencyViewModels[indexPath.row].changingIcon,
+            changeData: viewModel.currencyViewModels[indexPath.row].changingText,
+            capitalization: 0,
+            suply: 0
+        )
+        let view = DetailCoinView(viewModel: viewModel)
+        navigationController?.pushViewController(view, animated: true)
     }
 }
 
@@ -383,26 +397,31 @@ extension HomeView {
 
 extension HomeView {
     @objc func menuButtonTapped() {
-        if menuView.isHidden {
-            menuView.alpha = 0
-            menuView.isHidden = false
-            UIView.animate(withDuration: 0.1) {
-                self.menuView.alpha = 1
-            }
-        } else {
-            UIView.animate(withDuration: 0.1, animations: {
-                self.menuView.alpha = 0
-            }) { _ in
-                self.menuView.isHidden = true
-            }
-        }
+        changeMenuVisibility()
     }
     
     @objc func updateButtonTapped() {
+        changeMenuVisibility()
         viewModel.updateCurrencyData()
     }
     
     @objc func sortButtonTapped() {
         viewModel.sort()
+    }
+    
+    func changeMenuVisibility() {
+        if menuView.isHidden {
+            menuView.alpha = 0
+            menuView.isHidden = false
+            UIView.animate(withDuration: 0.2) {
+                self.menuView.alpha = 1
+            }
+        } else {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.menuView.alpha = 0
+            }) { _ in
+                self.menuView.isHidden = true
+            }
+        }
     }
 }

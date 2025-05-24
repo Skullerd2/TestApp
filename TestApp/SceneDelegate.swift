@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         let homeViewModel = HomeViewModel()
         let homeView = HomeView(viewModel: homeViewModel)
-        window?.rootViewController = homeView
+        let navigationController = UINavigationController(rootViewController: homeView)
+        navigationController.navigationBar.isHidden = true
+        window?.rootViewController = navigationController
 //        let loginViewModel = LoginViewModel()
 //        let loginView = LoginView(viewModel: loginViewModel)
 //        window!.rootViewController = loginView

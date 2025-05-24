@@ -49,6 +49,7 @@ class HomeViewModel {
     
     func updateCurrencyData() {
         currencyViewModels = []
+        currencyModels = []
         fetchMultipleCurrenciesData()
         onCurrenciesUpdated?()
     }
