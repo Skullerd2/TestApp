@@ -9,6 +9,10 @@ import UIKit
 
 @IBDesignable class SegmentedControl: UIControl {
     
+    @IBInspectable var selectedTextColor: UIColor = #colorLiteral(red: 0.09803921569, green: 0.1098039216, blue: 0.1960784314, alpha: 1)
+    @IBInspectable var unselectedTextColor: UIColor = #colorLiteral(red: 0.5764705882, green: 0.5843137255, blue: 0.6470588235, alpha: 1)
+
+    
     private var labels = [UILabel]()
     var thumbView = UIView()
     var items: [String] = ["24H", "1W", "1Y", "ALL", "Point"] {
@@ -47,16 +51,16 @@ import UIKit
         
         labels.removeAll(keepingCapacity: true)
         
-        for index in 1...items.count {
-            let label = UILabel(frame: CGRectZero)
-            label.attributedText = NSAttributedString(string: items[index - 1], attributes: [
-                .font: UIFont(name: "Poppins Medium", size: 14)!,
-                .foregroundColor: #colorLiteral(red: 0.09803921569, green: 0.1098039216, blue: 0.1960784314, alpha: 1)
-            ])
+        for index in 0..<items.count {
+            let label = UILabel(frame: .zero)
+            label.text = items[index]
+            label.font = UIFont(name: "Poppins Medium", size: 14)
             label.textAlignment = .center
+            label.textColor = (index == selectedIndex) ? selectedTextColor : unselectedTextColor
             self.addSubview(label)
             labels.append(label)
         }
+
     }
     
     override func layoutSubviews() {
@@ -113,10 +117,14 @@ import UIKit
         let thumbHeight = segmentHeight - 8
         let thumbX = CGFloat(selectedIndex) * segmentWidth + 4
         let thumbY = 4
+        
         UIView.animate(withDuration: 0.25) {
             self.thumbView.frame = CGRect(x: thumbX, y: CGFloat(thumbY), width: thumbWidth, height: thumbHeight)
         }
+        
+        for (index, label) in labels.enumerated() {
+            let color = (index == selectedIndex) ? selectedTextColor : unselectedTextColor
+            label.textColor = color
+        }
     }
-
-    
 }
