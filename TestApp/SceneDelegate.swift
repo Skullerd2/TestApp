@@ -13,12 +13,65 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        configureKeychainOnFirstLaunch()
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+        let isAuth: Bool? = UserDefaults.standard.value(forKey: "isAuth") as? Bool
+        if isAuth != nil {
+            window?.rootViewController = isAuth! ? TabView() : LoginView(viewModel: LoginViewModel())
+        } else {
+            window?.rootViewController = LoginView(viewModel: LoginViewModel())
+        }
+        window?.makeKeyAndVisible()
+    }
+    
+    func switchRootVCToTabView() {
+        guard let currentWindow = self.window else { return }
+        guard let windowScene = currentWindow.windowScene else { return }
+
+        let newWindow = UIWindow(windowScene: windowScene)
+        newWindow.rootViewController = TabView()
+        newWindow.makeKeyAndVisible()
+
+        let snapshot = currentWindow.snapshotView(afterScreenUpdates: false)
+        if let snapshot = snapshot {
+            newWindow.addSubview(snapshot)
+            UIView.animate(withDuration: 0.3, animations: {
+                snapshot.alpha = 0
+            }, completion: { _ in
+                snapshot.removeFromSuperview()
+            })
+        }
+
+        self.window = newWindow
+        currentWindow.isHidden = true
     }
 
+    func switchRootVCToLoginView() {
+        guard let currentWindow = self.window else { return }
+        guard let windowScene = currentWindow.windowScene else { return }
+
+        let newWindow = UIWindow(windowScene: windowScene)
+        let viewModel = LoginViewModel()
+        newWindow.rootViewController = LoginView(viewModel: viewModel)
+        newWindow.makeKeyAndVisible()
+
+        let snapshot = currentWindow.snapshotView(afterScreenUpdates: false)
+        if let snapshot = snapshot {
+            newWindow.addSubview(snapshot)
+            UIView.animate(withDuration: 0.3, animations: {
+                snapshot.alpha = 0
+            }, completion: { _ in
+                snapshot.removeFromSuperview()
+            })
+        }
+
+        self.window = newWindow
+        currentWindow.isHidden = true
+    }
+
+
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
@@ -48,5 +101,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
+    func configureKeychainOnFirstLaunch() {
+        let hasInitializedKeychain = UserDefaults.standard.bool(forKey: "hasInitializedKeychain")
+
+        if !hasInitializedKeychain {
+            KeychainManager.shared.save("1234", key: "login")
+            KeychainManager.shared.save("1234", key: "password")
+
+            UserDefaults.standard.set(true, forKey: "hasInitializedKeychain")
+            UserDefaults.standard.synchronize()
+
+            print("Keychain initialized with default values")
+        } else {
+            print("Keychain already initialized")
+        }
+    }
 }
 
