@@ -32,12 +32,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let newWindow = UIWindow(windowScene: windowScene)
         newWindow.rootViewController = TabView()
         newWindow.makeKeyAndVisible()
-        
+
+        let snapshot = currentWindow.snapshotView(afterScreenUpdates: false)
+        if let snapshot = snapshot {
+            newWindow.addSubview(snapshot)
+            UIView.animate(withDuration: 0.3, animations: {
+                snapshot.alpha = 0
+            }, completion: { _ in
+                snapshot.removeFromSuperview()
+            })
+        }
+
         self.window = newWindow
         currentWindow.isHidden = true
     }
 
-    
     func switchRootVCToLoginView() {
         guard let currentWindow = self.window else { return }
         guard let windowScene = currentWindow.windowScene else { return }
@@ -46,10 +55,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewModel = LoginViewModel()
         newWindow.rootViewController = LoginView(viewModel: viewModel)
         newWindow.makeKeyAndVisible()
-        
+
+        let snapshot = currentWindow.snapshotView(afterScreenUpdates: false)
+        if let snapshot = snapshot {
+            newWindow.addSubview(snapshot)
+            UIView.animate(withDuration: 0.3, animations: {
+                snapshot.alpha = 0
+            }, completion: { _ in
+                snapshot.removeFromSuperview()
+            })
+        }
+
         self.window = newWindow
         currentWindow.isHidden = true
     }
+
 
     
     func sceneDidDisconnect(_ scene: UIScene) {
