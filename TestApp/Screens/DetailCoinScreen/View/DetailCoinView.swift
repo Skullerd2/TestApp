@@ -23,6 +23,8 @@ class DetailCoinView: UIViewController {
     let suplyLabel = UILabel()
     let suplyDataLabel = UILabel()
     
+    let segmentedControl = SegmentedControl()
+    
     let viewModel: DetailCoinViewModel
     
     init(viewModel: DetailCoinViewModel) {
@@ -58,6 +60,7 @@ extension DetailCoinView {
         setupCapitalizationDataLabel()
         setupSuplyLabel()
         setupSuplyDataLabel()
+        setupSegmentedControl()
     }
     
     func setupBackButton() {
@@ -175,6 +178,11 @@ extension DetailCoinView {
         suplyDataLabel.translatesAutoresizingMaskIntoConstraints = false
         statisticView.addSubview(suplyDataLabel)
     }
+    
+    func setupSegmentedControl() {
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(segmentedControl)
+    }
 }
 
 //MARK: Setup Constraints
@@ -194,6 +202,7 @@ extension DetailCoinView {
         setupSuplyLabelConstraints()
         setupCapitalizationDataLabelConstraints()
         setupSuplyDataLabelConstraints()
+        setupSegmentedControlConstraints()
     }
     
     func setupBackButtonConstraints() {
@@ -231,7 +240,7 @@ extension DetailCoinView {
     func setupChangeLabelConstraints() {
         NSLayoutConstraint.activate([
             changeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            changeLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 16)
+            changeLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 8)
         ])
     }
     
@@ -285,6 +294,15 @@ extension DetailCoinView {
         NSLayoutConstraint.activate([
             suplyDataLabel.centerYAnchor.constraint(equalTo: suplyLabel.centerYAnchor),
             suplyDataLabel.trailingAnchor.constraint(equalTo: statisticView.trailingAnchor, constant: -25)
+        ])
+    }
+    
+    func setupSegmentedControlConstraints() {
+        NSLayoutConstraint.activate([
+            segmentedControl.topAnchor.constraint(equalTo: changeLabel.bottomAnchor, constant: 25),
+            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
+            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
+            segmentedControl.heightAnchor.constraint(equalToConstant: 56)
         ])
     }
 }
